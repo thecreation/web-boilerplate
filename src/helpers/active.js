@@ -1,6 +1,6 @@
-import fs from 'fs';
-import config from '../../config';
-import path from 'path';
+const fs = require('fs');
+const config = require('../../config');
+const path = require('path');
 
 module.exports.register = function (Handlebars) {
   Handlebars.registerHelper("active", function(url, options) {

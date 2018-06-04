@@ -1,6 +1,7 @@
-import fs from 'fs';
-import config from '../../config';
-import path from 'path';
+const fs = require('fs');
+const config = require('../../config');
+const path = require('path');
+const globParent = require('glob-parent');
 
 module.exports.register = function (Handlebars) {
   Handlebars.registerHelper("assets", function(options) {
@@ -11,8 +12,8 @@ module.exports.register = function (Handlebars) {
     } else {
       file = options.data.root.file;
     }
+    let relative = path.relative(globParent(config.html.pages), path.relative(file.cwd, path.dirname(file.path)));
 
-    let relative = path.relative(config.html.pages, path.relative(file.cwd, path.dirname(file.path)));
     let currentPath = path.join(config.html.build, relative);
 
     return new Handlebars.SafeString(path.relative(currentPath, config.assets.build));

@@ -6,6 +6,7 @@ const path = require('path');
 const argv = require('yargs-parser')(process.argv.slice(2));
 const expand = require('glob-expand');
 const colors = require('colors');
+
 const files = expand({
   cwd: process.cwd(),
 }, config.styles.source);

@@ -30,6 +30,11 @@ module.exports = {
     build: 'dist/images'
   },
 
+  assets: {
+    source: 'src/assets',
+    build: 'dist/assets'
+  },
+
   html: {
     pages: 'src/pages/**/*.hbs',
     data: "src/data/**/*.{js,json}",

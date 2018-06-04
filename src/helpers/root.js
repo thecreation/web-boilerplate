@@ -1,6 +1,7 @@
-import fs from 'fs';
-import config from '../../config';
-import path from 'path';
+const fs = require('fs');
+const config = require('../../config');
+const path = require('path');
+const globParent = require('glob-parent');
 
 module.exports.register = function (Handlebars) {
   Handlebars.registerHelper("root", function(options) {
@@ -12,7 +13,7 @@ module.exports.register = function (Handlebars) {
       file = options.data.root.file;
     }
 
-    let relative = path.relative(path.relative(file.cwd, path.dirname(file.path)), config.html.pages);
+    let relative = path.relative(path.relative(file.cwd, path.dirname(file.path)), globParent(config.html.pages));
     return new Handlebars.SafeString(relative);
   });
 };

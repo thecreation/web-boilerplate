@@ -1,8 +1,8 @@
-import fs from 'fs';
-import config from '../../config';
-import path from 'path';
-import sizeOf from 'image-size';
-import stringifyAttributes from 'stringify-attributes';
+const fs = require('fs');
+const config = require('../../config');
+const path = require('path');
+const sizeOf = require('image-size');
+const stringifyAttributes = require('stringify-attributes');
 
 const generateSrcSet = (basepath, srcMap, ext) => {
   return srcMap.map(candidate => {
@@ -106,7 +106,7 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
   let output = '';
 
   if(fs.existsSync(file)) {
-    
+
     if(placeholder === 'true' || placeholder === true) {
       output = `<div class="image"`;
       const dimensions = sizeOf(file);
