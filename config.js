@@ -38,6 +38,11 @@ module.exports = {
     build: 'dist/assets/images'
   },
 
+  svgs: {
+    source: 'src/svgs/**/*.svg',
+    build: 'dist/assets/svgs'
+  },
+
   assets: {
     source: 'src/assets',
     build: 'dist/assets'

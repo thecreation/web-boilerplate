@@ -15,10 +15,9 @@ imagemin([config.images.source], config.images.build, {
     pngquantPlugin(),
     gifLossyPlugin(),
     svgoPlugin({
-      plugins: [
-        {removeViewBox: true},
-        {cleanupIDs: false}
-      ]
+      plugins: [{
+        removeViewBox: true
+      }]
     })
   ]
 }).then(files => {

@@ -23,6 +23,8 @@
     "js:minify": "scripts/minify-js",
     "img": "npm-run-all img:minify",
     "img:minify": "scripts/minify-img",
+    "svg": "npm-run-all svg:minify",
+    "svg:minify": "scripts/minify-svg",
     "lint": "npm-run-all lint:css:fix lint:js:fix lint:md",
     "lint:css": "scripts/lint-css",
     "lint:css:fix": "scripts/lint-css --fix",
@@ -98,6 +100,7 @@
     "stylelint-config-recommended-scss": "^3.2.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-order": "^0.8.1",
+    "svgo": "^1.0.5",
     "uglify-es": "^3.3.9",
     "yargs": "^11.0.0",
     "yargs-parser": "^10.0.0"
