@@ -7,17 +7,17 @@ const path = require('path');
 const fs = require('fs-extra');
 const del = require('del');
 
-del.sync([config.favicons.build]);
-fs.mkdirSync(config.favicons.build);
+del.sync([config.favicon.build]);
+fs.mkdirSync(config.favicon.build);
 
-favicons(config.favicons.source, {
+favicons(config.favicon.source, {
   appName: config.name,
   appDescription: config.description,
   developerName: null,
   developerURL: null,
   background: 'transparent',
   theme_color: '#ffffff',
-  path: config.favicons.path,
+  path: config.favicon.path,
   display: 'standalone',
   orientation: 'portrait',
   version: config.version,
@@ -35,14 +35,14 @@ favicons(config.favicons.source, {
     windows: true,
     yandex: false,
   },
-  html: config.favicons.html,
+  html: config.favicon.html,
   replace: true,
 }, function (error, response) {
   if (error) return console.error(error);
 
   const { images, files, html } = response;
-  if(config.favicons.html) {
-     fs.writeFileSync(config.favicons.html, html.join('\n').replace(/assets/g, '{{assets}}'));
+  if(config.favicon.html) {
+     fs.writeFileSync(config.favicon.html, html.join('\n').replace(/assets/g, '{{assets}}'));
   }
   const promises = [];
   promises.push(images.map(writeImage));
@@ -55,7 +55,7 @@ favicons(config.favicons.source, {
 
 function writeImage({ name, contents }) {
   return new Promise((resolve, reject) => {
-    const full = path.join(config.favicons.build, name);
+    const full = path.join(config.favicon.build, name);
 
     fs.writeFile(full, contents, (error) => {
       if (error) return reject(error);
@@ -65,7 +65,7 @@ function writeImage({ name, contents }) {
 }
 function writeFile({ name, contents }) {
   return new Promise((resolve, reject) => {
-    const full = path.join(config.favicons.root, name);
+    const full = path.join(config.favicon.root, name);
 
     fs.writeFile(full, contents, (error) => {
       if (error) return reject(error);

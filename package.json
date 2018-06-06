@@ -9,7 +9,8 @@
   },
   "homepage": "https://github.com/thecreation/web-boilerplate",
   "scripts": {
-    "build": "npm-run-all css js img svg html",
+    "start": "npm-run-all --sequential build --parallel serve watch",
+    "build": "npm-run-all css js img svg favicon html",
     "clean": "npm-run-all clean:css clean:js clean:img",
     "clean:css": "scripts/clean-css",
     "clean:js": "scripts/clean-js",
@@ -41,7 +42,7 @@
     "html:minify": "scripts/usemin",
     "serve": "scripts/serve",
     "serve:reload": "scripts/serve-reload",
-    "favicons": "scripts/favicons",
+    "favicon": "scripts/favicon",
     "release": "release-it"
   },
   "dependencies": {

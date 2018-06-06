@@ -11,6 +11,11 @@ module.exports = {
   * Licensed under ${pkg.license}
   */`,
 
+  assets: {
+    source: 'src/assets',
+    build: 'dist/assets'
+  },
+
   styles: {
     source: 'src/styles/**/*.scss',
     build: 'dist/assets/css'
@@ -19,33 +24,6 @@ module.exports = {
   scripts: {
     source: 'src/scripts/*.js',
     build: 'dist/assets/js'
-  },
-
-  markdowns: {
-    source: '*.md'
-  },
-
-  favicons: {
-    path: "assets/favicons/",
-    source: 'src/favicons/favicon.png',
-    build: 'dist/assets/favicons',
-    html: 'src/partials/favicons.hbs',
-    root: "dist"
-  },
-
-  images: {
-    source: 'src/images/**/*.{jpg,png,gif,webp}',
-    build: 'dist/assets/images'
-  },
-
-  svgs: {
-    source: 'src/svgs/**/*.svg',
-    build: 'dist/assets/svgs'
-  },
-
-  assets: {
-    source: 'src/assets',
-    build: 'dist/assets'
   },
 
   html: {
@@ -59,5 +37,27 @@ module.exports = {
       production,
       pkg
     }
+  },
+
+  markdowns: {
+    source: '*.md'
+  },
+
+  favicon: {
+    path: "assets/favicon/",
+    source: 'src/favicon/favicon.png',
+    build: 'dist/assets/favicon',
+    html: 'src/partials/favicon.hbs',
+    root: "dist"
+  },
+
+  images: {
+    source: 'src/images/**/*.{jpg,png,gif,webp}',
+    build: 'dist/assets/img'
+  },
+
+  svgs: {
+    source: 'src/svgs/**/*.svg',
+    build: 'dist/assets/svg'
   }
 };
