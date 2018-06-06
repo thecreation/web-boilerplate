@@ -13,12 +13,12 @@ module.exports = {
 
   styles: {
     source: 'src/styles/**/*.scss',
-    build: 'dist/css'
+    build: 'dist/assets/css'
   },
 
   scripts: {
     source: 'src/scripts/*.js',
-    build: 'dist/js'
+    build: 'dist/assets/js'
   },
 
   markdowns: {
@@ -35,7 +35,7 @@ module.exports = {
 
   images: {
     source: 'src/images/**/*.{jpg,png,gif,webp}',
-    build: 'dist/images'
+    build: 'dist/assets/images'
   },
 
   assets: {

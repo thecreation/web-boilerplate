@@ -35,6 +35,8 @@
     "watch:css": "scripts/watch-css",
     "html": "npm-run-all html:compile",
     "html:compile": "scripts/compile-html",
+    "serve": "scripts/serve",
+    "serve:reload": "scripts/serve-reload",
     "favicons": "scripts/favicons"
   },
   "dependencies": {
@@ -48,6 +50,7 @@
     "babel-eslint": "^8.2.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.7.0",
+    "browser-sync": "^2.24.4",
     "chalk": "^2.4.1",
     "colors": "^1.3.0",
     "cssnano": "^3.10.0",

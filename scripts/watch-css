@@ -3,6 +3,7 @@
 const gaze = require('gaze');
 const config = require('../config');
 const colors = require('colors');
+const runAll = require("npm-run-all");
 
 console.info(colors.green(`Watch ${config.styles.source} files`));
 
@@ -24,8 +25,10 @@ gaze(config.styles.source, function(err, watcher) {
 
   // On changed/added/deleted
   this.on('all', function(event, filepath) {
-    //require('./beautify-css');
-    require('./compile-css');
-    require('./minify-css');
+    runAll(['css:compile', 'css:minify', 'serve:reload'], {
+      parallel: false, 
+      stdout: process.stdout, 
+      stderr: process.stderr
+    });
   });
 });

@@ -30,9 +30,9 @@ const compile = (src, dest) => {
       })
     ]
   }).then(bundle => {
-    bundle.write({
+    return bundle.write({
       file: dest,
-      name: 'sample',
+      //name: 'sample',
       format: 'umd',
       globals: {
         jquery: '$'
@@ -41,6 +41,7 @@ const compile = (src, dest) => {
     })
   }).then(()=>{
     console.log(colors.green(`${dest} generated.`));
+    process.exit(0);
   }).catch(error => {
     console.error(error);
     process.exit(1);
@@ -58,3 +59,4 @@ files.forEach(file => {
 
   compile(file, dest);
 });
+
