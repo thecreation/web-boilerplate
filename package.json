@@ -9,6 +9,7 @@
   },
   "homepage": "https://github.com/thecreation/web-boilerplate",
   "scripts": {
+    "build": "npm-run-all css js img svg html",
     "clean": "npm-run-all clean:css clean:js clean:img",
     "clean:css": "scripts/clean-css",
     "clean:js": "scripts/clean-js",
@@ -35,8 +36,9 @@
     "watch": "npm-run-all --parallel watch:*",
     "watch:js": "scripts/watch-js",
     "watch:css": "scripts/watch-css",
-    "html": "npm-run-all html:compile",
+    "html": "npm-run-all html:compile html:minify",
     "html:compile": "scripts/compile-html",
+    "html:minify": "scripts/usemin",
     "serve": "scripts/serve",
     "serve:reload": "scripts/serve-reload",
     "favicons": "scripts/favicons",
@@ -104,6 +106,7 @@
     "stylelint-order": "^0.8.1",
     "svgo": "^1.0.5",
     "uglify-es": "^3.3.9",
+    "usemin": "^0.5.0",
     "yargs": "^11.0.0",
     "yargs-parser": "^10.0.0"
   }
