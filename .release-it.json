@@ -3,6 +3,11 @@
     "tagName": "v%s"
   },
   "github": {
-    "release": true
-  }
+    "release": false
+  },
+  "npm": {
+    "publish": false
+  },
+  "requireUpstream": false,
+  "requireCleanWorkingDir": false
 }
