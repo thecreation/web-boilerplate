@@ -34,7 +34,8 @@
     "watch:js": "scripts/watch-js",
     "watch:css": "scripts/watch-css",
     "html": "npm-run-all html:compile",
-    "html:compile": "scripts/compile-html"
+    "html:compile": "scripts/compile-html",
+    "favicons": "scripts/favicons"
   },
   "dependencies": {
     "handlebars-helpers": "^0.10.0",
@@ -53,6 +54,7 @@
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-compat": "^2.3.0",
+    "favicons": "^5.1.1",
     "front-matter": "^2.3.0",
     "fs-extra": "^6.0.1",
     "gaze": "^1.1.3",

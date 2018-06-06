@@ -25,6 +25,14 @@ module.exports = {
     source: '*.md'
   },
 
+  favicons: {
+    path: "assets/favicons/",
+    source: 'src/favicons/favicon.png',
+    build: 'dist/assets/favicons',
+    html: 'src/partials/favicons.hbs',
+    root: "dist"
+  },
+
   images: {
     source: 'src/images/**/*.{jpg,png,gif,webp}',
     build: 'dist/images'
