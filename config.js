@@ -11,6 +11,11 @@ module.exports = {
   * Licensed under ${pkg.license}
   */`,
 
+  paths: {
+    source: 'src',
+    build: 'dist'
+  },
+
   assets: {
     source: 'src/assets',
     build: 'dist/assets'
@@ -48,7 +53,6 @@ module.exports = {
     source: 'src/favicon/favicon.png',
     build: 'dist/assets/favicon',
     html: 'src/partials/favicon.hbs',
-    root: "dist"
   },
 
   images: {

@@ -11,13 +11,15 @@ const colors = require('colors');
 
 imagemin([config.images.source], config.images.build, {
   plugins: [
-    mozJpegPlugin({progressive: true}),
+    mozJpegPlugin({ progressive: true }),
     pngquantPlugin(),
     gifLossyPlugin(),
     svgoPlugin({
-      plugins: [{
-        removeViewBox: true
-      }]
+      plugins: [
+        {
+          removeViewBox: true
+        }
+      ]
     })
   ]
 }).then(files => {

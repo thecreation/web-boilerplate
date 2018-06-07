@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 const config = require('../config');
-const prettier = require("prettier");
-const fs = require("fs");
+const prettier = require('prettier');
+const fs = require('fs');
 const expand = require('glob-expand');
 const colors = require('colors');
 
-const beautify = (file) => {
+const beautify = file => {
   fs.readFile(file, 'utf8', (err, content) => {
     if (err) {
       console.error(err);
@@ -22,7 +22,7 @@ const beautify = (file) => {
       parser: 'babylon'
     });
 
-    if(data) {
+    if (data) {
       fs.writeFile(file, data, err => {
         if (err) {
           console.error(err);
@@ -32,11 +32,14 @@ const beautify = (file) => {
       });
     }
   });
-}
+};
 
-const files = expand({
-  cwd: process.cwd(),
-}, config.scripts.source);
+const files = expand(
+  {
+    cwd: process.cwd()
+  },
+  config.scripts.source
+);
 
 files.forEach(file => {
   beautify(file);

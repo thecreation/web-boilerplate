@@ -1,5 +1,5 @@
 {
-  "version": "0.0.2",
+  "version": "0.0.3",
   "name": "web-boilerplate",
   "author": "Creation Studio Limited",
   "license": "MIT",
@@ -11,10 +11,13 @@
   "scripts": {
     "start": "npm-run-all --sequential build --parallel serve watch",
     "build": "npm-run-all css js img svg favicon html",
-    "clean": "npm-run-all clean:css clean:js clean:img",
+    "clean": "npm-run-all clean:*",
     "clean:css": "scripts/clean-css",
     "clean:js": "scripts/clean-js",
     "clean:img": "scripts/clean-img",
+    "clean:html": "scripts/clean-html",
+    "clean:svg": "scripts/clean-svg",
+    "clean:favicon": "scripts/clean-favicon",
     "css": "npm-run-all css:beautify css:compile css:minify",
     "css:beautify": "scripts/beautify-css",
     "css:compile": "scripts/compile-css",
@@ -111,17 +114,5 @@
     "usemin": "^0.5.0",
     "yargs": "^11.0.0",
     "yargs-parser": "^10.0.0"
-  },
-  "browserslist": [
-    "last 1 major version",
-    ">= 1%",
-    "Chrome >= 45",
-    "Firefox >= 38",
-    "Edge >= 12",
-    "Explorer >= 10",
-    "iOS >= 9",
-    "Safari >= 9",
-    "Android >= 4.4",
-    "Opera >= 30"
-  ]
+  }
 }

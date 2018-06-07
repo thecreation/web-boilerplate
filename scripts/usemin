@@ -8,9 +8,12 @@ const globParent = require('glob-parent');
 const colors = require('colors');
 const usemin = require('usemin');
 
-const files = expand({
-  cwd: process.cwd(),
-}, [`${config.html.build}/**/*.html`]);
+const files = expand(
+  {
+    cwd: process.cwd()
+  },
+  [`${config.html.build}/**/*.html`]
+);
 
 files.forEach(file => {
   usemin(file, config.html.build, {
@@ -27,12 +30,10 @@ files.forEach(file => {
         removeStyleLinkTypeAttributes: true,
         minifyJS: false,
         minifyCSS: false
-      },
+      }
     },
     removeLivereload: true
   });
 
   console.log(colors.green(`${file} minified.`));
 });
-
-

@@ -12,19 +12,18 @@ const handlebarsWax = require('handlebars-wax');
 const fm = require('front-matter');
 
 const wax = handlebarsWax(handlebars)
+  // Partials
+  .partials(config.html.partials)
+  .partials(config.html.layouts)
 
-// Partials
-.partials(config.html.partials)
-.partials(config.html.layouts)
+  // Data
+  .data(config.html.data)
+  .data(config.html.metadata)
 
-// Data
-.data(config.html.data)
-.data(config.html.metadata)
-
-// Helpers
-.helpers(require('handlebars-layouts'))
-.helpers(require('handlebars-helpers')(['comparison','markdown']))
-.helpers(config.html.helpers);
+  // Helpers
+  .helpers(require('handlebars-layouts'))
+  .helpers(require('handlebars-helpers')(['comparison', 'markdown']))
+  .helpers(config.html.helpers);
 
 const compile = (src, dest) => {
   fs.readFile(src, 'utf8', (err, content) => {
@@ -44,7 +43,7 @@ const compile = (src, dest) => {
       }
     });
 
-    fs.ensureFileSync(dest)
+    fs.ensureFileSync(dest);
     fs.writeFileSync(dest, result);
 
     console.log(colors.green(`${dest} generated.`));
@@ -52,13 +51,16 @@ const compile = (src, dest) => {
 };
 
 const base = globParent(config.html.pages);
-const files = expand({
-  cwd: process.cwd(),
-}, config.html.pages);
+const files = expand(
+  {
+    cwd: process.cwd()
+  },
+  config.html.pages
+);
 
 files.forEach(file => {
   let dest = path.join(config.html.build, path.relative(base, file));
-      dest = rename(dest, {extname: '.html'});
+  dest = rename(dest, { extname: '.html' });
 
   compile(file, dest);
 });

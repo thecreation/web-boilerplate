@@ -15,7 +15,7 @@ const rename = require('rename');
 
 const getModulesPath = () => {
   return path.join(process.cwd(), '..');
-}
+};
 
 const compile = (src, dest) => {
   try {
@@ -33,35 +33,40 @@ const compile = (src, dest) => {
   postcss([
     autoprefixer,
     header({
-      header: config.banner,
+      header: config.banner
     })
-  ]).process(result.css.toString(), {from: undefined, to: dest}).then(result => {
-    fs.ensureFileSync(dest)
-    fs.writeFileSync(dest, result.css);
+  ])
+    .process(result.css.toString(), { from: undefined, to: dest })
+    .then(result => {
+      fs.ensureFileSync(dest);
+      fs.writeFileSync(dest, result.css);
 
-    if (result.map){
-      fs.writeFileSync(dest+'.map', result.map);
-    }
+      if (result.map) {
+        fs.writeFileSync(dest + '.map', result.map);
+      }
 
-    console.log(colors.green(`${dest} generated.`));
-    process.exit(0);
-  }).catch(error => {
-    console.error(error);
-    process.exit(1);
-  });
-}
+      console.log(colors.green(`${dest} generated.`));
+      process.exit(0);
+    })
+    .catch(error => {
+      console.error(error);
+      process.exit(1);
+    });
+};
 
 const base = globParent(config.styles.source);
-const files = expand({
-  cwd: process.cwd(),
-}, config.styles.source);
+const files = expand(
+  {
+    cwd: process.cwd()
+  },
+  config.styles.source
+);
 
 files.forEach(file => {
   let dest = path.join(config.styles.build, path.relative(base, file));
-      dest = rename(dest, {extname: '.css'});
+  dest = rename(dest, { extname: '.css' });
   let filename = path.basename(dest);
-  if(!filename.match(/^_/)) {
+  if (!filename.match(/^_/)) {
     compile(file, dest);
   }
 });
-

@@ -1,19 +1,22 @@
 #!/usr/bin/env node
 
-const SVGO = require('svgo')
+const SVGO = require('svgo');
 const config = require('../config');
-const fs = require("fs-extra");
+const fs = require('fs-extra');
 const globParent = require('glob-parent');
 const expand = require('glob-expand');
 const colors = require('colors');
 const path = require('path');
 
 const svgo = new SVGO({
-  plugins: [{
-    cleanupIDs: true
-  },{
-    removeDimensions: true
-  }]
+  plugins: [
+    {
+      cleanupIDs: true
+    },
+    {
+      removeDimensions: true
+    }
+  ]
 });
 
 const minify = (src, dest) => {
@@ -23,7 +26,7 @@ const minify = (src, dest) => {
       process.exit(1);
     }
 
-    svgo.optimize(content, {path: src}).then(function(result) {
+    svgo.optimize(content, { path: src }).then(function(result) {
       fs.ensureFileSync(dest);
       fs.writeFile(dest, result.data, err => {
         if (err) {
@@ -36,12 +39,15 @@ const minify = (src, dest) => {
       });
     });
   });
-}
+};
 
 const base = globParent(config.svgs.source);
-const files = expand({
-  cwd: process.cwd(),
-}, config.svgs.source);
+const files = expand(
+  {
+    cwd: process.cwd()
+  },
+  config.svgs.source
+);
 
 files.forEach(file => {
   let dest = path.join(config.svgs.build, path.relative(base, file));
