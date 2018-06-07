@@ -83,14 +83,6 @@ gem install sass
 
 Before install sass, you should [install Ruby](https://www.ruby-lang.org/en/documentation/installation/) and [install Gem](https://rubygems.org/pages/download).
 
-### Install Yarn
-
-[Install Yarn globally](https://yarnpkg.com/docs/install/)
-
-```bash
-npm install --global yarn
-```
-
 ### Install Gemini
 [Install Gemini globally](https://github.com/gemini-testing/gemini#installing).
 
@@ -112,7 +104,7 @@ selenium-standalone install
 2. Install Dependencies
 
    ```bash
-   yarn install
+   npm install
    ```
 
 3. Build the project
