@@ -18,21 +18,24 @@ const compile = (src, dest) => {
       input: src,
       external: ['jquery'],
       plugins: [
+        resolve({
+          jsnext: true,
+          main: true,
+          browser: true,
+        }),
+        commonjs({
+          include: ['node_modules/**']
+        }),
         babel({
           babelrc: false,
           presets: [['env', { modules: false }]],
           plugins: ['external-helpers']
         }),
-        resolve(),
-        commonjs({
-          include: ['node_modules/**']
-        })
       ]
     })
     .then(bundle => {
       return bundle.write({
         file: dest,
-        //name: 'sample',
         format: 'umd',
         globals: {
           jquery: '$'

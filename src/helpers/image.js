@@ -30,7 +30,7 @@ const generateMedia = (basepath, screenMap, ext, webp = false) => {
     if(webp) {
       output += ' type="image/webp"';
     }
-    output += ` srcset="${basepath}@${candidate.width*2}${ext} 2x, ${basepath}@${candidate.width}${ext} 1x" />`;
+    output += ` data-srcset="${basepath}@${candidate.width*2}${ext} 2x, ${basepath}@${candidate.width}${ext} 1x" />`;
     return output;
   }).join('');
 }
@@ -121,24 +121,24 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
       output += `<source type="image/webp"`;
 
       if(srcMap.length > 0) {
-        output += ` srcset="${generateSrcSet(basepath, srcMap, '.webp')}" />`;
+        output += ` data-srcset="${generateSrcSet(basepath, srcMap, '.webp')}" />`;
       } else if(src !== null) {
-        output += ` srcset="${basepath}@${src}.webp" />`;
+        output += ` data-srcset="${basepath}@${src}.webp" />`;
       } else {
-        output += ` srcset="${basepath}.webp" />`;
+        output += ` data-srcset="${basepath}.webp" />`;
       }
     }
 
     output += generateMedia(basepath, screenMap, ext);
 
     if(srcMap.length > 0) {
-      output += `<source srcset="${generateSrcSet(basepath, srcMap, ext)}" />`;
+      output += `<source data-srcset="${generateSrcSet(basepath, srcMap, ext)}" />`;
     }
 
     if(src) {
-      output += `<img src="${basepath}@${src}${ext}" ${stringifyAttributes(attributes)} />`;
+      output += `<img data-src="${basepath}@${src}${ext}" ${stringifyAttributes(attributes)} />`;
     } else {
-      output += `<img src="${url}" ${stringifyAttributes(attributes)} />`;
+      output += `<img data-src="${url}" ${stringifyAttributes(attributes)} />`;
     }
 
     output += '</picture>';
@@ -147,8 +147,16 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
       output += '</div>';
     }
   } else {
-    output = `<img src="${url}" ${stringifyAttributes(attributes)} />`;
+    output = `<img data-src="${url}" ${stringifyAttributes(attributes)} />`;
   }
 
   return output;
 }
+
+module.exports.register = function (Handlebars) {
+  Handlebars.registerHelper("image", function(url, options) {
+    const {webp = true, src = null, srcset = null, placeholder = true, ...attributes} = options.hash || {};
+    const output = generatePicture(url, src, srcset, webp, placeholder, attributes);
+    return new Handlebars.SafeString(output);
+  });
+};
