@@ -27,7 +27,7 @@
     "img:minify": "scripts/minify-img",
     "svg": "npm-run-all svg:minify",
     "svg:minify": "scripts/minify-svg",
-    "lint": "npm-run-all lint:css:fix lint:js:fix lint:md",
+    "lint": "npm-run-all lint:css:fix lint:js:fix  lint:html lint:md",
     "lint:css": "scripts/lint-css",
     "lint:css:fix": "scripts/lint-css --fix",
     "lint:js": "scripts/lint-js",
@@ -105,10 +105,23 @@
     "stylelint-config-recommended-scss": "^3.2.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-order": "^0.8.1",
+    "stylelint-scss": "^3.1.0",
     "svgo": "^1.0.5",
     "uglify-es": "^3.3.9",
     "usemin": "^0.5.0",
     "yargs": "^11.0.0",
     "yargs-parser": "^10.0.0"
-  }
+  },
+  "browserslist": [
+    "last 1 major version",
+    ">= 1%",
+    "Chrome >= 45",
+    "Firefox >= 38",
+    "Edge >= 12",
+    "Explorer >= 10",
+    "iOS >= 9",
+    "Safari >= 9",
+    "Android >= 4.4",
+    "Opera >= 30"
+  ]
 }

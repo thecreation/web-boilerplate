@@ -1,13 +1,13 @@
 // import $ from 'jquery';
 
-(function(document) {
+(function (document) {
   const toggle = document.querySelector('.sidebar-toggle');
   const sidebar = document.querySelector('#sidebar');
   const checkbox = document.querySelector('#sidebar-checkbox');
 
   document.addEventListener(
     'click',
-    e => {
+    (e) => {
       const target = e.target;
       if (
         !checkbox.checked ||
@@ -21,4 +21,4 @@
     },
     false
   );
-})(document);
+}(document));
