@@ -53,10 +53,6 @@ This starter also features a number of great software (in the words of their cre
 * [rollup-plugin-node-resolve](https://github.com/rollup/rollup-plugin-node-resolve) - Use the Node.js resolution algorithm with Rollup.
 * [rollup-plugin-commonjs](https://github.com/rollup/rollup-plugin-commonjs) - Convert CommonJS modules to ES2015.
 
-### Tests
-
-* [Gemini](https://gemini-testing.github.io/) - a utility for regression testing the visual appearance of web pages.
-
 ### Git Hooks manager
 
 * [husky](https://github.com/typicode/husky)
@@ -82,15 +78,6 @@ gem install sass
 ```
 
 Before install sass, you should [install Ruby](https://www.ruby-lang.org/en/documentation/installation/) and [install Gem](https://rubygems.org/pages/download).
-
-### Install Gemini
-[Install Gemini globally](https://github.com/gemini-testing/gemini#installing).
-
-```bash
-npm install -g gemini
-npm install -g selenium-standalone
-selenium-standalone install
-```
 
 ## Getting started
 
@@ -212,19 +199,6 @@ Below you can find full details about significant files and folders.
     ├── /layouts/           # Handlebars layouts that are based on
     ├── /partials/          # Handlebars partials that are included / extended
     └── /pages/             # Handlebars pages, one per page on the site
-```
-
-## Running tests
-Start `selenium-standalone` in a separate tab before running the tests:
-
-```bash
-selenium-standalone start
-```
-
-Run gemini tests with flat reporter:
-
-```bash
-gemini test --reporter flat
 ```
 
 ## License
