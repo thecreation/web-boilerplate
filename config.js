@@ -5,6 +5,8 @@ const production = argv.production || argv.prod || false;
 const year = new Date().getFullYear();
 
 module.exports = {
+  production: production,
+
   banner: `/*!
   * ${pkg.name} v${pkg.version} (${pkg.homepage})
   * Copyright ${year} ${pkg.author}

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-const browser = require('./browser');
-const config = require('../config');
+const browser = require("./browser");
 const colors = require('colors');
 
 browser.reload();
