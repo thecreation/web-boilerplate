@@ -5,53 +5,114 @@ const sizeOf = require('image-size');
 const stringifyAttributes = require('stringify-attributes');
 const globParent = require('glob-parent');
 const sharp = require('sharp');
+const imagemin = require('imagemin');
+const mozJpegPlugin = require('imagemin-mozjpeg');
+const gifLossyPlugin = require('imagemin-giflossy');
+const pngquantPlugin = require('imagemin-pngquant');
+const svgoPlugin = require('imagemin-svgo');
+const webpPlugin = require('imagemin-webp');
 
 const sourcePath = globParent(config.images.source);
 const buildPath = config.images.build;
 const relativePath = path.relative(config.paths.build, config.images.build);
 
-const processImage = (input, output, width) => {
-  sharp(input).resize(width).toFile(output);
-}
-
-const generateImgTag = (url, attributes) => {
-  return `<img data-src="${url}"${stringifyAttributes(attributes)} />`;
-}
-
-const generateSrcSetTag = (filename, srcMap, ext) => {
-  return srcMap.map(candidate => {
-    return `${relativePath}/${filename}@${candidate.width}${ext} ${candidate.density}`;
-  }).join(', ');
-}
-
-const generateMediaTag = (filename, screenMap, ext, webp = false) => {
-  return screenMap.map((candidate, index) => {
-    let output;
-
-    if(index === 0 && screenMap.length === 1) {
-      output = `<source media="(min-width: ${next}px)"`;
-    } else if(index < screenMap.length - 1){
-      let next = screenMap[index+1].screen - 1;
-      if(candidate.screen == 0) {
-        output = `<source media="(max-width: ${next}px)"`;
-      } else {
-        output = `<source media="(min-width: ${candidate.screen}px) and (max-width: ${next}px)"`;
-      }
-    } else {
-      output = `<source media="(min-width: ${candidate.screen}px)"`;
-    }
-
-    if(webp) {
-      output += ' type="image/webp"';
-    }
-    output += ` data-srcset="${relativePath}/${filename}@${candidate.width*2}${ext} 2x, ${relativePath}/${filename}@${candidate.width}${ext} 1x" />`;
-    return output;
-  }).join('');
-}
-
 const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
   const source = path.join(sourcePath, url);
-  const {ext, dir, filename, base} = path.parse(url);
+  const {ext, dir, name, base} = path.parse(url);
+
+  const processImage = (image) => {
+    let match = /\S+@(\d+)\.\w+/.exec(image);
+
+    if(match) {
+      width = parseInt(match[1]);
+      image = match[0];
+    }
+
+    const dist = path.join(config.paths.build, image);
+
+    if(!fs.existsSync(dist)) {
+      let processor = sharp(source);
+      if(width) {
+        processor.resize(width);
+      }
+
+      processor.toBuffer().then(data => {
+        imagemin.buffer(data, config.images.build, {
+          plugins: [
+            mozJpegPlugin({ progressive: true }),
+            pngquantPlugin(),
+            gifLossyPlugin(),
+            webpPlugin(),
+            svgoPlugin({
+              plugins: [
+                {
+                  removeViewBox: true
+                }
+              ]
+            })
+          ]
+        }).then(data => {
+          fs.writeFileSync(dist, data);
+        });
+      });
+    }
+  }
+
+  const generateImgTag = (src, attributes) => {
+    processImage(src);
+    return `<img data-src="${src}"${stringifyAttributes(attributes)} />`;
+  }
+
+  const generateSrcSet = (name, srcMap, ext) => {
+    return srcMap.map(candidate => {
+      return `${relativePath}/${name}@${candidate.width}${ext} ${candidate.density}`;
+    }).join(', ');
+  }
+
+  const generateSourceTag = (srcset, type, media) => {
+    let images = srcset.split(',');
+    images.forEach((image) => {
+      processImage(image);
+    });
+
+    let output = '<source ';
+
+    if(media) {
+      output += `media="${media}" `;
+    }
+
+    if(type) {
+      output += `type="${type}" `;
+    }
+
+    return output + `data-srcset="${srcset}" />`;
+  }
+
+  const generateScreenSourceTags = (name, screenMap, ext, webp = false) => {
+    return screenMap.map((candidate, index) => {
+      let output, media, type;
+
+      if(index === 0 && screenMap.length === 1) {
+
+        media = `(min-width: ${next}px)`;
+      } else if(index < screenMap.length - 1){
+        let next = screenMap[index+1].screen - 1;
+        if(candidate.screen == 0) {
+          media = `(max-width: ${next}px)`;
+        } else {
+          media = `(min-width: ${candidate.screen}px) and (max-width: ${next}px)`;
+        }
+      } else {
+        media = `(min-width: ${candidate.screen}px)`;
+      }
+
+      if(webp) {
+        type = "image/webp";
+      }
+
+      return generateSourceTag(`${relativePath}/${name}@${candidate.width*2}${ext} 2x, ${relativePath}/${name}@${candidate.width}${ext} 1x`, type, media);
+    }).join('');
+  }
 
   if(srcset) {
     srcset = srcset.split(',');
@@ -128,29 +189,29 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
     output += '<picture>';
 
     if(webp === 'true' || webp === true) {
-      output += generateMediaTag(filename, screenMap, '.webp', true);
-      
-      output += `<source type="image/webp"`;
+      output += generateScreenSourceTags(name, screenMap, '.webp', true);
 
       if(srcMap.length > 0) {
-        output += ` data-srcset="${generateSrcSetTag(filename, srcMap, '.webp')}" />`;
-      } else if(src !== null) {
-        output += ` data-srcset="${relativePath}/${filename}@${src}.webp" />`;
+        output += generateSourceTag(generateSrcSet(name, srcMap, '.webp'), 'image/webp');
+      }
+
+      if(src !== null) {
+        output += generateSourceTag(`${relativePath}/${name}@${src}.webp`, 'image/webp');
       } else {
-        output += ` data-srcset="${relativePath}/${filename}.webp" />`;
+        output += generateSourceTag(`${relativePath}/${name}.webp`, 'image/webp');
       }
     }
 
-    output += generateMediaTag(filename, screenMap, ext);
+    output += generateScreenSourceTags(name, screenMap, ext);
 
     if(srcMap.length > 0) {
-      output += `<source data-srcset="${generateSrcSetTag(filename, srcMap, ext)}" />`;
+      output += generateSourceTag(generateSrcSet(name, srcMap, ext));
     }
 
     if(src) {
-      output += generateImgTag(`${relativePath}/${filename}@${src}${ext}`, attributes); 
+      output += generateImgTag(`${relativePath}/${name}@${src}${ext}`, attributes);
     } else {
-      output += generateImgTag(url, attributes);
+      output += generateImgTag(`${relativePath}/${url}`, attributes);
     }
 
     output += '</picture>';
@@ -159,7 +220,7 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
       output += '</div>';
     }
   } else {
-    output = generateImgTag(url, attributes);
+    output = generateImgTag(`${relativePath}/${url}`, attributes);
   }
 
   return output;

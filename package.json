@@ -1,5 +1,5 @@
 {
-  "version": "0.0.4",
+  "version": "0.0.5",
   "name": "web-boilerplate",
   "author": "Creation Studio Limited",
   "license": "MIT",
@@ -98,6 +98,7 @@
     "imagemin-mozjpeg": "^7.0.0",
     "imagemin-pngquant": "^5.1.0",
     "imagemin-svgo": "^6.0.0",
+    "imagemin-webp": "^4.1.0",
     "jsonlint": "^1.6.3",
     "lint-staged": "^7.2.0",
     "markdownlint": "^0.10.0",
