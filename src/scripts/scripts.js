@@ -1,4 +1,4 @@
-// import $ from 'jquery';
+import Lazyload from 'vanilla-lazyload';
 
 (function(document) {
   const toggle = document.querySelector('.sidebar-toggle');
@@ -21,4 +21,12 @@
     },
     false
   );
+
+  // https://github.com/verlok/lazyload
+  new Lazyload({
+    threshold: 500,
+    elements_selector: '.lazy',
+    data_src: 'src',
+    data_srcset: 'srcset'
+  });
 })(document);

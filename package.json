@@ -52,7 +52,7 @@
     "release": "release-it"
   },
   "dependencies": {
-    "jquery": "^3.3.1"
+    "vanilla-lazyload": "^8.7.1"
   },
   "browserslist": [
     "> 1%",

@@ -3,6 +3,7 @@ const config = require('../../config');
 const path = require('path');
 const sizeOf = require('image-size');
 const stringifyAttributes = require('stringify-attributes');
+const globParent = require('glob-parent');
 
 const generateSrcSet = (basepath, srcMap, ext) => {
   return srcMap.map(candidate => {
@@ -34,12 +35,14 @@ const generateMedia = (basepath, screenMap, ext, webp = false) => {
     return output;
   }).join('');
 }
+const sourcePath = globParent(config.images.source);
+const buildPath = path.relative(config.paths.build, config.images.build);
 
 const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
-  const file = path.join(config.paths.build, url);
-
+  
+  const file = path.join(sourcePath, url);
   const {ext, dir, name, base} = path.parse(url);
-  const basepath = `${dir}/${name}`;
+  const basepath = `${buildPath}/${name}`;
 
   if(srcset) {
     srcset = srcset.split(',');
@@ -106,7 +109,6 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
   let output = '';
 
   if(fs.existsSync(file)) {
-
     if(placeholder === 'true' || placeholder === true) {
       output = `<div class="image"`;
       const dimensions = sizeOf(file);
@@ -136,9 +138,9 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
     }
 
     if(src) {
-      output += `<img data-src="${basepath}@${src}${ext}" ${stringifyAttributes(attributes)} />`;
+      output += `<img data-src="${basepath}@${src}${ext}"${stringifyAttributes(attributes)} />`;
     } else {
-      output += `<img data-src="${url}" ${stringifyAttributes(attributes)} />`;
+      output += `<img data-src="${url}"${stringifyAttributes(attributes)} />`;
     }
 
     output += '</picture>';
@@ -147,7 +149,7 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
       output += '</div>';
     }
   } else {
-    output = `<img data-src="${url}" ${stringifyAttributes(attributes)} />`;
+    output = `<img data-src="${url}"${stringifyAttributes(attributes)} />`;
   }
 
   return output;
@@ -156,6 +158,7 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
 module.exports.register = function (Handlebars) {
   Handlebars.registerHelper("image", function(url, options) {
     const {webp = true, src = null, srcset = null, placeholder = true, ...attributes} = options.hash || {};
+
     const output = generatePicture(url, src, srcset, webp, placeholder, attributes);
     return new Handlebars.SafeString(output);
   });
