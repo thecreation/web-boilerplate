@@ -72,7 +72,7 @@ function writeImage({ name, contents }) {
 }
 function writeFile({ name, contents }) {
   return new Promise((resolve, reject) => {
-    const full = path.join(config.paths.build, name);
+    const full = path.join(config.favicon.build, name);
 
     fs.writeFile(full, contents, error => {
       if (error) return reject(error);

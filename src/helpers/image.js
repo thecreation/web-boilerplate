@@ -5,6 +5,10 @@ const sizeOf = require('image-size');
 const stringifyAttributes = require('stringify-attributes');
 const globParent = require('glob-parent');
 
+const generateImage = () => {
+  
+}
+
 const generateSrcSet = (basepath, srcMap, ext) => {
   return srcMap.map(candidate => {
     return `${basepath}@${candidate.width}${ext} ${candidate.density}`;
