@@ -4,18 +4,27 @@ const path = require('path');
 const sizeOf = require('image-size');
 const stringifyAttributes = require('stringify-attributes');
 const globParent = require('glob-parent');
+const sharp = require('sharp');
 
-const generateImage = () => {
-  
+const sourcePath = globParent(config.images.source);
+const buildPath = config.images.build;
+const relativePath = path.relative(config.paths.build, config.images.build);
+
+const processImage = (input, output, width) => {
+  sharp(input).resize(width).toFile(output);
 }
 
-const generateSrcSet = (basepath, srcMap, ext) => {
+const generateImgTag = (url, attributes) => {
+  return `<img data-src="${url}"${stringifyAttributes(attributes)} />`;
+}
+
+const generateSrcSetTag = (filename, srcMap, ext) => {
   return srcMap.map(candidate => {
-    return `${basepath}@${candidate.width}${ext} ${candidate.density}`;
+    return `${relativePath}/${filename}@${candidate.width}${ext} ${candidate.density}`;
   }).join(', ');
 }
 
-const generateMedia = (basepath, screenMap, ext, webp = false) => {
+const generateMediaTag = (filename, screenMap, ext, webp = false) => {
   return screenMap.map((candidate, index) => {
     let output;
 
@@ -35,18 +44,14 @@ const generateMedia = (basepath, screenMap, ext, webp = false) => {
     if(webp) {
       output += ' type="image/webp"';
     }
-    output += ` data-srcset="${basepath}@${candidate.width*2}${ext} 2x, ${basepath}@${candidate.width}${ext} 1x" />`;
+    output += ` data-srcset="${relativePath}/${filename}@${candidate.width*2}${ext} 2x, ${relativePath}/${filename}@${candidate.width}${ext} 1x" />`;
     return output;
   }).join('');
 }
-const sourcePath = globParent(config.images.source);
-const buildPath = path.relative(config.paths.build, config.images.build);
 
 const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
-  
-  const file = path.join(sourcePath, url);
-  const {ext, dir, name, base} = path.parse(url);
-  const basepath = `${buildPath}/${name}`;
+  const source = path.join(sourcePath, url);
+  const {ext, dir, filename, base} = path.parse(url);
 
   if(srcset) {
     srcset = srcset.split(',');
@@ -112,10 +117,10 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
 
   let output = '';
 
-  if(fs.existsSync(file)) {
+  if(fs.existsSync(source)) {
     if(placeholder === 'true' || placeholder === true) {
       output = `<div class="image"`;
-      const dimensions = sizeOf(file);
+      const dimensions = sizeOf(source);
       const padding = 100*(dimensions.height/dimensions.width);
 
       output += ` style="padding-bottom: ${padding.toFixed(3)}%">`;
@@ -123,28 +128,29 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
     output += '<picture>';
 
     if(webp === 'true' || webp === true) {
-      output += generateMedia(basepath, screenMap, '.webp', true);
+      output += generateMediaTag(filename, screenMap, '.webp', true);
+      
       output += `<source type="image/webp"`;
 
       if(srcMap.length > 0) {
-        output += ` data-srcset="${generateSrcSet(basepath, srcMap, '.webp')}" />`;
+        output += ` data-srcset="${generateSrcSetTag(filename, srcMap, '.webp')}" />`;
       } else if(src !== null) {
-        output += ` data-srcset="${basepath}@${src}.webp" />`;
+        output += ` data-srcset="${relativePath}/${filename}@${src}.webp" />`;
       } else {
-        output += ` data-srcset="${basepath}.webp" />`;
+        output += ` data-srcset="${relativePath}/${filename}.webp" />`;
       }
     }
 
-    output += generateMedia(basepath, screenMap, ext);
+    output += generateMediaTag(filename, screenMap, ext);
 
     if(srcMap.length > 0) {
-      output += `<source data-srcset="${generateSrcSet(basepath, srcMap, ext)}" />`;
+      output += `<source data-srcset="${generateSrcSetTag(filename, srcMap, ext)}" />`;
     }
 
     if(src) {
-      output += `<img data-src="${basepath}@${src}${ext}"${stringifyAttributes(attributes)} />`;
+      output += generateImgTag(`${relativePath}/${filename}@${src}${ext}`, attributes); 
     } else {
-      output += `<img data-src="${url}"${stringifyAttributes(attributes)} />`;
+      output += generateImgTag(url, attributes);
     }
 
     output += '</picture>';
@@ -153,7 +159,7 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
       output += '</div>';
     }
   } else {
-    output = `<img data-src="${url}"${stringifyAttributes(attributes)} />`;
+    output = generateImgTag(url, attributes);
   }
 
   return output;
