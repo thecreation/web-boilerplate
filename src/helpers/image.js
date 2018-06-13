@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const config = require('../../config');
 const path = require('path');
 const sizeOf = require('image-size');
@@ -20,8 +20,14 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
   const source = path.join(sourcePath, url);
   const {ext, dir, name, base} = path.parse(url);
 
+  let basepath = name;
+  if(dir) {
+    basepath = `${dir}/${name}`;
+  }
+
   const processImage = (image) => {
     let match = /\S+@(\d+)\.\w+/.exec(image);
+    let width, file = image;
 
     if(match) {
       width = parseInt(match[1]);
@@ -29,7 +35,6 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
     }
 
     const dist = path.join(config.paths.build, image);
-
     if(!fs.existsSync(dist)) {
       let processor = sharp(source);
       if(width) {
@@ -52,6 +57,7 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
             })
           ]
         }).then(data => {
+          fs.ensureFileSync(dist);
           fs.writeFileSync(dist, data);
         });
       });
@@ -63,9 +69,9 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
     return `<img data-src="${src}"${stringifyAttributes(attributes)} />`;
   }
 
-  const generateSrcSet = (name, srcMap, ext) => {
+  const generateSrcSet = (basepath, srcMap, ext) => {
     return srcMap.map(candidate => {
-      return `${relativePath}/${name}@${candidate.width}${ext} ${candidate.density}`;
+      return `${relativePath}/${basepath}@${candidate.width}${ext} ${candidate.density}`;
     }).join(', ');
   }
 
@@ -88,7 +94,7 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
     return output + `data-srcset="${srcset}" />`;
   }
 
-  const generateScreenSourceTags = (name, screenMap, ext, webp = false) => {
+  const generateScreenSourceTags = (basepath, screenMap, ext, webp = false) => {
     return screenMap.map((candidate, index) => {
       let output, media, type;
 
@@ -110,7 +116,7 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
         type = "image/webp";
       }
 
-      return generateSourceTag(`${relativePath}/${name}@${candidate.width*2}${ext} 2x, ${relativePath}/${name}@${candidate.width}${ext} 1x`, type, media);
+      return generateSourceTag(`${relativePath}/${basepath}@${candidate.width*2}${ext} 2x, ${relativePath}/${basepath}@${candidate.width}${ext} 1x`, type, media);
     }).join('');
   }
 
@@ -189,27 +195,27 @@ const generatePicture = (url, src, srcset, webp, placeholder, attributes) => {
     output += '<picture>';
 
     if(webp === 'true' || webp === true) {
-      output += generateScreenSourceTags(name, screenMap, '.webp', true);
+      output += generateScreenSourceTags(basepath, screenMap, '.webp', true);
 
       if(srcMap.length > 0) {
-        output += generateSourceTag(generateSrcSet(name, srcMap, '.webp'), 'image/webp');
+        output += generateSourceTag(generateSrcSet(basepath, srcMap, '.webp'), 'image/webp');
       }
 
       if(src !== null) {
-        output += generateSourceTag(`${relativePath}/${name}@${src}.webp`, 'image/webp');
+        output += generateSourceTag(`${relativePath}/${basepath}@${src}.webp`, 'image/webp');
       } else {
-        output += generateSourceTag(`${relativePath}/${name}.webp`, 'image/webp');
+        output += generateSourceTag(`${relativePath}/${basepath}.webp`, 'image/webp');
       }
     }
 
-    output += generateScreenSourceTags(name, screenMap, ext);
+    output += generateScreenSourceTags(basepath, screenMap, ext);
 
     if(srcMap.length > 0) {
-      output += generateSourceTag(generateSrcSet(name, srcMap, ext));
+      output += generateSourceTag(generateSrcSet(basepath, srcMap, ext));
     }
 
     if(src) {
-      output += generateImgTag(`${relativePath}/${name}@${src}${ext}`, attributes);
+      output += generateImgTag(`${relativePath}/${basepath}@${src}${ext}`, attributes);
     } else {
       output += generateImgTag(`${relativePath}/${url}`, attributes);
     }
