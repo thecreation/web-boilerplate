@@ -11,14 +11,15 @@
   "scripts": {
     "start": "npm-run-all --sequential build --parallel serve watch",
     "dev": "scripts/dev",
-    "build": "npm-run-all img svg favicon icons css:compile js:compile html:compile",
-    "dist": "npm-run-all img svg favicon css js html",
+    "build": "npm-run-all img svg favicon icons vendor css:compile js:compile html:compile",
+    "dist": "npm-run-all img svg favicon icons vendor css js html",
     "clean": "npm-run-all clean:*",
     "clean:css": "scripts/clean-css",
     "clean:js": "scripts/clean-js",
     "clean:img": "scripts/clean-img",
     "clean:html": "scripts/clean-html",
     "clean:svg": "scripts/clean-svg",
+    "clean:vendor": "scripts/clean-vendor",
     "clean:favicon": "scripts/clean-favicon",
     "css": "npm-run-all css:beautify css:compile css:minify",
     "css:beautify": "scripts/beautify-css",
@@ -33,7 +34,7 @@
     "img:minify": "scripts/minify-img",
     "svg": "npm-run-all svg:minify",
     "svg:minify": "scripts/minify-svg",
-    "lint": "npm-run-all lint:css:fix lint:js:fix  lint:html lint:md",
+    "lint": "npm-run-all lint:css:fix lint:js:fix lint:html lint:md",
     "lint:css": "scripts/lint-css",
     "lint:css:fix": "scripts/lint-css --fix",
     "lint:js": "scripts/lint-js",
@@ -50,9 +51,11 @@
     "serve": "scripts/serve",
     "serve:reload": "scripts/serve-reload",
     "favicon": "scripts/favicon",
+    "vendor": "scripts/vendor",
     "release": "release-it"
   },
   "dependencies": {
+    "picturefill": "^3.0.2",
     "vanilla-lazyload": "^8.7.1"
   },
   "browserslist": [
@@ -68,6 +71,7 @@
     "Opera >= 30"
   ],
   "devDependencies": {
+    "assets-manager": "^0.3.8",
     "autoprefixer": "^8.6.3",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",

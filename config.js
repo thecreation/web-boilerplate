@@ -78,6 +78,17 @@ module.exports = {
     html: 'src/partials/favicon.hbs',
   },
 
+  vendor: {
+    manifest: 'manifest.json',
+    dest: 'dist/assets/vendor',
+    flattenPackages: true,
+    paths: {
+      css: '${dest}/${package}/${file}',
+      js: '${dest}/${package}/${file}',
+      fonts: '${dest}/${package}/${file}'
+    }
+  },
+
   images: {
     source: 'src/images/**/*.{jpg,png,gif,webp}',
     build: 'dist/assets/img'
