@@ -58,6 +58,19 @@ module.exports = {
     source: '*.md'
   },
 
+  icons: {
+    source: 'src/icons/svgs/**/*.svg',
+    build: 'dist/assets/icons',
+    fileName: 'icons',
+    fontName: `${pkg.name}-icons`,
+    // template: 'src/icons/_template.css',
+    // templateDist: 'dist/icons/icons.css',
+    // fontPath: './',
+    template: 'src/icons/_template.scss',
+    templateDist: 'src/styles/_icons.scss',
+    fontPath: '../icons/',
+  },
+
   favicon: {
     path: "assets/favicon/",
     source: 'src/favicon/favicon.png',
