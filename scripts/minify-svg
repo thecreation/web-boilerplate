@@ -35,7 +35,6 @@ const minify = (src, dest) => {
         }
 
         console.log(colors.green(`${src} minified.`));
-        process.exit(0);
       });
     });
   });

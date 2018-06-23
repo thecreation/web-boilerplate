@@ -45,7 +45,6 @@ const compile = (src, dest) => {
     })
     .then(() => {
       console.log(colors.green(`${dest} generated.`));
-      process.exit(0);
     })
     .catch(error => {
       console.error(error);

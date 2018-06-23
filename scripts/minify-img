@@ -26,5 +26,4 @@ imagemin([config.images.source], config.images.build, {
   files.forEach(file => {
     console.log(colors.green(`${file.path} minified.`));
   });
-  process.exit(0);
 });

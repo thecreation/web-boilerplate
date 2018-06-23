@@ -21,7 +21,6 @@ const minify = file => {
           process.exit(1);
         }
         console.log(colors.green(`${file} minified.`));
-        process.exit(0);
       });
     });
   });
