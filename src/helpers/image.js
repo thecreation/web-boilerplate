@@ -16,7 +16,7 @@ const sourcePath = globParent(config.images.source);
 const buildPath = config.images.build;
 const relativePath = path.relative(config.paths.build, config.images.build);
 
-const processImage = (image) => {
+const processImage = (source, image) => {
   let match = /\S+@(\d+)\.\w+/.exec(image);
   let width, file = image;
 
@@ -26,7 +26,7 @@ const processImage = (image) => {
   }
 
   const dist = path.join(config.paths.build, image);
-  if(!fs.existsSync(dist)) {
+  if(!fs.existsSync(file)) {
     let processor = sharp(source);
     if(width) {
       processor.resize(width);
@@ -138,14 +138,14 @@ const generatePicture = (src, size, sizes, webp, placeholder, attributes) => {
   }
 
   const generateImgTag = (src, attributes) => {
-    processImage(src);
+    processImage(source, src);
     return `<img data-src="${src}"${stringifyAttributes(attributes)} />`;
   }
 
   const generateSourceTag = (srcset, type, media) => {
     let images = srcset.split(',');
     images.forEach((image) => {
-      processImage(image);
+      processImage(source, image);
     });
 
     let output = '<source ';

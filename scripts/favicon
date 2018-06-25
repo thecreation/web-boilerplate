@@ -8,7 +8,7 @@ const fs = require('fs-extra');
 const del = require('del');
 
 del.sync([config.favicon.build]);
-fs.mkdirSync(config.favicon.build);
+fs.ensureDirSync(config.favicon.build);
 
 favicons(
   config.favicon.source,
