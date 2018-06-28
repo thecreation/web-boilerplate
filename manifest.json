@@ -2,7 +2,7 @@
 {
   "packages": {
     "npm:picturefill": {
-    	"js": "dist/picturefill.js"
+      "js": "dist/picturefill.js"
     }
   }
 }

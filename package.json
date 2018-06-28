@@ -71,6 +71,7 @@
     "Opera >= 30"
   ],
   "devDependencies": {
+    "assets-manager": "^0.3.8",
     "autoprefixer": "^8.6.4",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.5",
