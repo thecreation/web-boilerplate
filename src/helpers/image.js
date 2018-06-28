@@ -302,11 +302,15 @@ const generateImage = (src, size, sizes, placeholder, attributes) => {
     output += '<img';
 
     if(sizeMap.length > 0) {
-      output += ` data-srcset="${generateSrcset(basepath, sizeMap, ext)}"`
+      let srcset = generateSrcset(basepath, sizeMap, ext);
+      processImage(source, srcset);
+      output += ` data-srcset="${srcset}"`
     }
     if(size) {
+      processImage(source, `${relativePath}/${basepath}@${size}${ext}`);
       output += ` data-src="${relativePath}/${basepath}@${size}${ext}"`;
     } else {
+      processImage(source, `${relativePath}/${src}`);
       output += ` data-src="${relativePath}/${src}"`;
     }
     if(screenMap.length > 0) {
