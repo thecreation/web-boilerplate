@@ -303,7 +303,10 @@ const generateImage = (src, size, sizes, placeholder, attributes) => {
 
     if(sizeMap.length > 0) {
       let srcset = generateSrcset(basepath, sizeMap, ext);
-      processImage(source, srcset);
+      let images = srcset.split(',');
+      images.forEach((image) => {
+        processImage(source, image);
+      });
       output += ` data-srcset="${srcset}"`
     }
     if(size) {
