@@ -26,7 +26,7 @@ const processImage = (source, image) => {
   }
 
   const dist = path.join(config.paths.build, image);
-  if(!fs.existsSync(file)) {
+  if(!fs.existsSync(dist)) {
     let processor = sharp(source);
     if(width) {
       processor.resize(width);
