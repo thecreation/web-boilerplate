@@ -1,7 +1,7 @@
 const path = require('path');
-const argv = require('yargs-parser')(process.argv.slice(2));
+const env = process.env.NODE_ENV || 'prod';
 const pkg = require(path.resolve(process.cwd(), 'package.json'));
-const production = argv.production || argv.prod || false;
+const production = env === 'prod';
 const year = new Date().getFullYear();
 
 module.exports = {
