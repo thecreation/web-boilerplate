@@ -28,7 +28,8 @@ const compile = (src, dest) => {
         }),
         babel({
           babelrc: false,
-          presets: [['env', { modules: false }]]
+          presets: [['@babel/preset-env', { modules: false }]],
+          plugins: ["@babel/plugin-external-helpers"]
         }),
       ]
     })
